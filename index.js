@@ -44,7 +44,7 @@ async function run() {
     });
 
     app.get("/services/:id", async (req, res) => {
-      const id = req.params.id;
+      const id = req.params.id.toString();
       const query = { _id: ObjectId(id) };
       const result = await serviceCollection.findOne(query);
       res.send(result);
