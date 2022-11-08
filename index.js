@@ -27,7 +27,16 @@ async function run() {
   try {
     //code goes here
     const serviceCollection = client.db("doctorSamDb").collection("services");
+    //get three services for home pages
     app.get("/services", async (req, res) => {
+      const query = {};
+      const cursor = serviceCollection.find(query).limit(3);
+      const services = await cursor.toArray();
+      res.send(services);
+    });
+
+    //get all the services for services page
+    app.get("/servicesAll", async (req, res) => {
       const query = {};
       const cursor = serviceCollection.find(query);
       const services = await cursor.toArray();
