@@ -1,6 +1,6 @@
 const express = require("express");
 const cors = require("cors");
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 require("dotenv").config();
 const app = express();
 const port = process.env.PORT || 5000;
@@ -8,8 +8,6 @@ const port = process.env.PORT || 5000;
 // middle wares
 app.use(cors());
 app.use(express.json());
-
-console.log(process.env.DB_PASSWORD);
 
 app.get("/", (req, res) => {
   res.send("doctor sam server is running");
@@ -23,12 +21,30 @@ const client = new MongoClient(uri, {
   useUnifiedTopology: true,
   serverApi: ServerApiVersion.v1,
 });
-client.connect((err) => {
-  const serviceCollection = client.db("test").collection("devices");
-  // perform actions on the collection object
-  client.close();
-});
 
+async function run() {
+  //code goes here
+  try {
+    //code goes here
+    const serviceCollection = client.db("doctorSamDb").collection("services");
+    app.get("/services", async (req, res) => {
+      const query = {};
+      const cursor = serviceCollection.find(query);
+      const services = await cursor.toArray();
+      res.send(services);
+    });
+
+    app.get("/services/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const result = await serviceCollection.findOne(query);
+      res.send(result);
+    });
+  } finally {
+    //code goes here
+  }
+}
+run().catch((err) => console.log(err));
 app.listen(port, () => {
   console.log(`doctor server in running on port ${port}`);
 });
