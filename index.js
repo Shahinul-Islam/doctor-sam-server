@@ -17,9 +17,6 @@ app.get("/", (req, res) => {
 
 //database connection
 
-// user_name:doctorSamDb
-//password:NC5CWFIoL61jBw5g
-
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.kdwgcoc.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, {
   useNewUrlParser: true,
