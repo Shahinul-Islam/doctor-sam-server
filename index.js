@@ -30,7 +30,9 @@ async function run() {
     //get three services for home pages
     app.get("/services", async (req, res) => {
       const query = {};
-      const cursor = serviceCollection.find(query).limit(3);
+      sort = { _id: -1 };
+      // collection.find({}, limit=10).sort(sort)
+      const cursor = serviceCollection.find(query).limit(3).sort(sort);
       const services = await cursor.toArray();
       res.send(services);
     });
@@ -76,6 +78,13 @@ async function run() {
       console.log(result);
       res.send(result);
     });
+
+    //get reviews
+    /*  app.get("/servicesAll", async (req, res) => {
+      // const query = { reviews };
+      const result = await serviceCollection.find({ title });
+      console.log(result);
+    }); */
   } finally {
     //code goes here
   }
