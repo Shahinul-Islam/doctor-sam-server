@@ -54,13 +54,17 @@ async function run() {
     app.post("/services/:id", async (req, res) => {
       const id = req.params.id.toString();
       const userReview = req.body;
-      console.log(userReview);
-      // const reviews = [userReview];
-      // const result = await serviceCollection.findOneAndUpdate(id, userReview);
-      // console.log(result);
-      const query = { _id: ObjectId(id) };
-      const result = await serviceCollection.findOne(query);
-      const update = await serviceCollection.insertOne(userReview);
+      const result = await serviceCollection.updateOne(
+        { _id: ObjectId(id) }, // should be important to "cast"
+        {
+          $push: {
+            reviews: {
+              $each: [userReview],
+            },
+          },
+        }
+      );
+      res.send(result);
     });
   } finally {
     //code goes here
