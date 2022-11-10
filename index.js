@@ -50,7 +50,7 @@ async function run() {
       res.send(result);
     });
 
-    // create
+    // create review
     app.post("/services/:id", async (req, res) => {
       const id = req.params.id.toString();
       const userReview = req.body;
@@ -64,6 +64,16 @@ async function run() {
           },
         }
       );
+      res.send(result);
+    });
+
+    //create service
+
+    app.post("/services", async (req, res) => {
+      // const id = req.params.id.toString();
+      const userService = req.body;
+      const result = await serviceCollection.insertOne(userService);
+      console.log(result);
       res.send(result);
     });
   } finally {
